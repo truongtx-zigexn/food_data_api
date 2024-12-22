@@ -25,6 +25,15 @@ module Api
         )
         render json: result
       end
+
+      def list
+        service = FoodDataService.new
+        result = service.get_foods_list(
+          params[:page],
+          params[:per_page]
+        )
+        render json: result
+      end
     end
   end
 end

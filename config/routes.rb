@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       resources :foods, only: [ :index, :show ] do
         collection do
           get "search"
+          get "list"
         end
       end
     end
