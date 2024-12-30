@@ -4,7 +4,7 @@ module Api
       def index
         meals = Meal.all
 
-        render json: { meals: meal }
+        render json: { meals: meals }
       end
 
       def show
