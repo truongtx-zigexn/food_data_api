@@ -1,17 +1,25 @@
-version: '3.8'
+version: "3.8"
 
 services:
   db:
     image: mysql:5.7
     volumes:
       - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: food_data_api_development
 
   web:
     build: .
-    command: /bin/sh -c "until mysql -h db -u root -proot -e 'select 1'; do echo waiting for mysql; sleep 2; done; mysql -h db -u root -proot food_data_api_development < ./data/import.sql && rails server -b 0.0.0.0"
+    command: /bin/sh -c "
+      until mysql -h db -u root -proot -e 'select 1'; do echo waiting for mysql; sleep 2; done;
+      rails db:reset;
+      rails db:migrate;
+      mysql -h db -u root -proot food_data_api_development < ./data/import.sql;
+      rm -f tmp/pids/server.pid;
+      rails server -b 0.0.0.0"
     volumes:
       - .:/app
     ports:
