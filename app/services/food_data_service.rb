@@ -54,7 +54,6 @@ class FoodDataService
 
     # Debug output URL và query string
     puts "Final URL: #{url}"
-    # binding.pry
     # Gọi API với URL đầy đủ và không cần sử dụng @options[:query]
     self.class.get(url)
   end
