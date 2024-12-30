@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: food_data_api_development
+
+  web:
+    build: .
+    command: /bin/sh -c "until mysql -h db -u root -proot -e 'select 1'; do echo waiting for mysql; sleep 2; done; mysql -h db -u root -proot food_data_api_development < ./data/import.sql && rails server -b 0.0.0.0"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+  generate_api:
+    build:
+      context: ../generate_meal_api
+      dockerfile: Dockerfile
+    volumes:
+      - ../generate_meal_api:/app
+    ports:
+      - "8000:8000"
+
+  web-ui:
+    build:
+      context: ../broccoli-client
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ../broccoli-client:/app
+    environment:
+      NODE_ENV: development
+
+volumes:
+  db_data:
