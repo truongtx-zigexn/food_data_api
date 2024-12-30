@@ -9,12 +9,13 @@ module Api
 
       def show
         meal = Meal.find_by(id: params[:id])
-        ingredients = get_inredients(meal)
-        total_nutrition = calculate_total_nutrition(ingredients)
+        ingredients = get_ingredients(meal)
+        meal_nutrition = calculate_meal_nutrition(ingredients)
 
-        render json: { meal: meal,
+        render json: { name: meal.name,
+                       img_url: meal.img_url,
                        ingredients: ingredients,
-                       total_nutrition: total_nutrition }
+                       meal_nutrition: meal_nutrition }
       end
     end
   end
