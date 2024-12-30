@@ -1,6 +1,6 @@
 module Api
   module V1
-    class FoodsController < ApplicationController
+    class IngredientsController < ApplicationController
       def search
         service = FoodDataService.new
         result = service.search_foods(
@@ -12,7 +12,6 @@ module Api
       end
 
       def multiple
-        # binding.pry
         # Ex: http://127.0.0.1:3000/api/v1/foods/multiple?fdc_ids=2219707,2219708&nutrients=205,203&format=full
         # Chuyển đổi các tham số từ dạng chuỗi sang mảng
         fdc_ids = params[:fdc_ids].split(",") if params[:fdc_ids]
