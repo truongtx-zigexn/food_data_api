@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
   private
 
-  def get_inredients(meal)
+  def get_ingredients(meal)
     ingredients = meal.ingredients.pluck(:fdb_id)
     format = "abridged"
     nutrients = [208, 957, 291, 203, 204, 205, 298]
@@ -11,7 +11,10 @@ class ApplicationController < ActionController::API
     result = clean_result(JSON.parse(service.search_multiple_foods(ingredients, format, nutrients).body))
 
     # Attach quantity to ingredient
-    result.each { |ingredient| ingredient[:qty] = MealIngredient.find_by(fdb_id: ingredient[:fdcId])[:ingredient_qty] }
+    result.each { |ingredient|
+      ingredient[:ingredient_qty] = MealIngredient.
+        find_by(fdb_id: ingredient[:fdcId])[:ingredient_qty]
+    }
     result
   end
 
@@ -41,17 +44,17 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def calculate_total_nutrition(ingredients)
-    total_nutrition = { carbs: 0, protein: 0, fat: 0, fiber: 0, calories: 0 }
+  def calculate_meal_nutrition(ingredients)
+    meal_nutrition = { carbs: 0, protein: 0, fat: 0, fiber: 0, calories: 0 }
     ingredients.each do |ingredient|
       nutrients = ingredient[:nutrients]
 
-      total_nutrition[:carbs] += (nutrients[:carbs] * ingredient[:qty] / 100) || 0
-      total_nutrition[:protein] += (nutrients[:protein] * ingredient[:qty] / 100) || 0
-      total_nutrition[:fat] += (nutrients[:fat] * ingredient[:qty] / 100) || 0
-      total_nutrition[:fiber] += (nutrients[:fiber] * ingredient[:qty] / 100) || 0
-      total_nutrition[:calories] += (nutrients[:calories] * ingredient[:qty] / 100) || 0
+      meal_nutrition[:carbs] += (nutrients[:carbs] * ingredient[:ingredient_qty] / 100) || 0
+      meal_nutrition[:protein] += (nutrients[:protein] * ingredient[:ingredient_qty] / 100) || 0
+      meal_nutrition[:fat] += (nutrients[:fat] * ingredient[:ingredient_qty] / 100) || 0
+      meal_nutrition[:fiber] += (nutrients[:fiber] * ingredient[:ingredient_qty] / 100) || 0
+      meal_nutrition[:calories] += (nutrients[:calories] * ingredient[:ingredient_qty] / 100) || 0
     end
-    total_nutrition
+    meal_nutrition
   end
 end
