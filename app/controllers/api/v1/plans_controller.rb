@@ -46,7 +46,7 @@ module Api
 
         { id: meal.id,
           name: meal.name,
-          img_url: meal.img_url,
+          img_url: meal.image.attached? ? url_for(meal.image) : nil,
           ingredients: ingredients,
           meal_nutrition: meal_nutrition }
       end

@@ -2,7 +2,13 @@ module Api
   module V1
     class MealsController < ApplicationController
       def index
-        meals = Meal.all
+        meals = Meal.all.map do |meal|
+          {
+            id: meal.id,
+            name: meal.name,
+            img_url: meal.image.attached? ? url_for(meal.image) : nil,
+          }
+        end
 
         render json: { meals: meals }
       end
@@ -13,7 +19,7 @@ module Api
         meal_nutrition = calculate_meal_nutrition(ingredients)
 
         render json: { name: meal.name,
-                       img_url: meal.img_url,
+                       img_url: meal.image.attached? ? url_for(meal.image) : nil,
                        ingredients: ingredients,
                        meal_nutrition: meal_nutrition }
       end
