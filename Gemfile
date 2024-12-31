@@ -12,5 +12,5 @@ gem "rack-cors"
 group :development, :test do
   gem "brakeman", require: false
   gem "rubocop-rails-omakase", require: false
-  gem "pry", "~> 0.14.1"
+  gem "pry", "~> 0.15.2"
 end
