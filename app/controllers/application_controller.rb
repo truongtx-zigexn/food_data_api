@@ -1,4 +1,34 @@
 class ApplicationController < ActionController::API
+  def current_user
+    token = request.headers['Authorization']
+    if token.present?
+      decoded_token = decode_token(token)
+      Rails.logger.info("Decoded Token: #{decoded_token}") # Log để kiểm tra payload
+      @current_user ||= User.find(decoded_token['user_id']) if decoded_token.present? # Đảm bảo dùng string key
+    end
+  rescue ActiveRecord::RecordNotFound => e
+    Rails.logger.error("User not found: #{e.message}")
+    nil
+  end
+  def decode_token(token)
+    begin
+      token = token.split(' ').last if token.present?
+      decoded = JWT.decode(token, Rails.application.secret_key_base)[0]
+      Rails.logger.info("Decoded Token: #{decoded}")
+      decoded
+    rescue JWT::ExpiredSignature
+      Rails.logger.error("Token has expired")
+      nil
+    rescue JWT::DecodeError => e
+      Rails.logger.error("JWT Decode Error: #{e.message}")
+      nil
+    end
+  end
+
+  def authorize_request
+    render json: { error: 'Not Authorized' }, status: :unauthorized unless current_user
+  end
+
   private
 
   def get_ingredients(meal)

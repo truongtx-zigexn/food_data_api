@@ -8,9 +8,12 @@ Rails.application.routes.draw do
           get :multiple
         end
       end
+      post 'signup', to: 'users#signup'
+      post 'login', to: 'users#login'
+      delete 'logout', to: 'users#logout'
 
       resources :meals, only: %i(index show)
-
+      resources :physical_stats, only: [:create, :update, :show]
       resources :plans, only: %i() do
         collection do
           post :index

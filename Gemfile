@@ -7,6 +7,8 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 gem "httparty"
 gem "dotenv-rails"
+gem "bcrypt", "~> 3.1.7"
+gem "jwt"
 
 group :development, :test do
   gem "brakeman", require: false
