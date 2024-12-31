@@ -19,4 +19,7 @@ Meal.find_each do |meal|
   end
 end
 
+user = User.create! username: "Team_16", full_name: "Team 16", password: 123
+PhysicalStat.create! user: user, gender: :male, height: 170, weight: 70, activity_lvl: :moderate,goal_calories: 2000, age: 21
+
 puts "Seeding completed!"
