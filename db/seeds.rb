@@ -3,7 +3,7 @@ require "open-uri"
 puts "Seeding Meals with Images..."
 
 Meal.find_each do |meal|
-  return if meal.attached?
+  return if meal&.image&.attached?
 
   image_path = Rails.root.join("db/seeds/images", "#{meal.id}.jpg")
 
