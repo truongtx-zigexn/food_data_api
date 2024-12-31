@@ -36,10 +36,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_28_070634) do
 
   create_table "physical_stats", charset: "utf8mb4", force: :cascade do |t|
     t.integer "age"
-    t.string "gender"
+    t.integer "gender"
     t.float "height"
     t.float "weight"
-    t.string "activity_lvl"
+    t.integer "activity_lvl"
+    t.integer "goal_calories"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

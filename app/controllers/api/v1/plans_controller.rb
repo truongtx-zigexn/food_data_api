@@ -11,8 +11,11 @@ module Api
       end
 
       def generate
-        # Call AI API
-        meal_ids = [2, 3, 4, 5]
+        # Call generate meals API
+        option = get_option(User.first, params[:previous_meal_ids])
+        service = GenerateMealService.new
+        response = service.generate(option)
+        meal_ids = response["result"]
 
         plan = Plan.find_by(apply_date: params[:apply_date])
         meals = Meal.find(meal_ids)
@@ -69,6 +72,21 @@ module Api
         end
         plan_nutrition = calculate_plan_nutrition(meals)
         { meals: meals, plan_nutrition: plan_nutrition }
+      end
+
+      def get_option(user, previous_meal_ids)
+        stat = user.physical_stat
+        return {
+                 "height": stat.height || "none",
+                 "weight": stat.weight || "none",
+                 "age": stat.age || "none",
+                 "preferences": "none",
+                 "lifestyle": stat.activity_lvl || "none",
+                 "diet": "none",
+                 "allergy": "none",
+                 "previous_meal_ids": previous_meal_ids || [],
+                 "calo": stat.goal_calories || "none",
+               }
       end
     end
   end

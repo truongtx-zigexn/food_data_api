@@ -15,6 +15,7 @@ services:
     build: .
     command: /bin/sh -c "
       until mysql -h db -u root -proot -e 'select 1'; do echo waiting for mysql; sleep 2; done;
+      bundle install;
       rails db:reset;
       rails db:migrate;
       mysql -h db -u root -proot food_data_api_development < ./data/import.sql;

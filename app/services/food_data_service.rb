@@ -58,7 +58,6 @@ class FoodDataService
     self.class.get(url)
   end
 
-
   def get_food(fdc_id)
     self.class.get("/food/#{fdc_id}", @options)
   end
