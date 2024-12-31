@@ -7,7 +7,7 @@ module Api
 
         return render json: { msg: "Plan has not been created" } if plan.nil?
 
-        render json: { **get_render_data(plan) }
+        render json: { **get_render_data(plan), apply_date: params[:apply_date] }
       end
 
       def generate
@@ -32,7 +32,7 @@ module Api
           plan.chosen_meals.create!(chosen_meals)
         end
 
-        render json: { **get_render_data(plan) }
+        render json: { **get_render_data(plan), apply_date: params[:apply_date] }
       end
 
       private
@@ -41,7 +41,8 @@ module Api
         ingredients = get_ingredients(meal)
         meal_nutrition = calculate_meal_nutrition(ingredients)
 
-        { name: meal.name,
+        { id: meal.id,
+          name: meal.name,
           img_url: meal.img_url,
           ingredients: ingredients,
           meal_nutrition: meal_nutrition }

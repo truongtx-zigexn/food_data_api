@@ -7,6 +7,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 gem "httparty"
 gem "dotenv-rails"
+gem "rack-cors"
 
 group :development, :test do
   gem "brakeman", require: false
